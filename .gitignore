@@ -1,0 +1,10 @@
+.venv/
+_pycache_/
+*.pyc
+.pytest_cache/
+dist/
+build/
+*.pem
+*.key
+*.sbox
+*.sig
