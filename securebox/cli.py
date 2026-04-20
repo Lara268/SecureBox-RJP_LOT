@@ -1,5 +1,6 @@
 import argparse
 from pathlib import Path
+from securebox.crypto.handshake import run_handshake_demo
 
 from securebox.keys import (
     gen_rsa_private_key,
@@ -97,6 +98,8 @@ def cmd_inspect(args):
     for k, v in container.items():
         print(f"{k}: {v}")
 
+def cmd_handshake_demo(args):
+    run_handshake_demo()        
 
 def main():
     parser = argparse.ArgumentParser(prog="securebox")
@@ -135,12 +138,14 @@ def main():
     p.add_argument("input")
     p.set_defaults(func=cmd_inspect)
 
+    p = sub.add_parser("handshake-demo")
+    p.set_defaults(func=cmd_handshake_demo)
+
     args = parser.parse_args()
     if hasattr(args, "func"):
         args.func(args)
     else:
         parser.print_help()
-
 
 if __name__ == "__main__":
     main()
