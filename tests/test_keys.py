@@ -1,3 +1,4 @@
+import pytest
 from cryptography.hazmat.primitives.asymmetric import ed25519, rsa, x25519
 
 from securebox.keys import (
@@ -52,3 +53,16 @@ def test_sign_key_serialization_roundtrip():
 
     assert isinstance(loaded_private, ed25519.Ed25519PrivateKey)
     assert isinstance(loaded_public, ed25519.Ed25519PublicKey)
+
+
+def test_invalid_rsa_key_size_raises_value_error():
+    with pytest.raises(ValueError):
+        gen_rsa_private_key(key_size=1024)
+
+
+def test_private_key_wrong_password_raises_value_error():
+    private_key = gen_rsa_private_key()
+    private_pem = pem_serialize_encrypted_private_key(private_key, PASSWORD)
+
+    with pytest.raises(ValueError):
+        pem_load_private_key(private_pem, b"password_incorrecta")

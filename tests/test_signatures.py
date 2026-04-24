@@ -28,3 +28,17 @@ def test_signature_tampering():
     c["ciphertext"] = "AAAA"
 
     assert verify_container(c, sign_pk) is False
+
+
+def test_signature_invalid_with_wrong_public_key():
+    msg = b"firma con clave publica incorrecta"
+    rsa_sk = gen_rsa_private_key()
+    rsa_pk = rsa_sk.public_key()
+
+    sign_sk, _ = gen_sign_keypair()
+    _, wrong_sign_pk = gen_sign_keypair()
+
+    c = encrypt_rsa_envelope(msg, rsa_pk)
+    c = sign_container(c, sign_sk)
+
+    assert verify_container(c, wrong_sign_pk) is False
